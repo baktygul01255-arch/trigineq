@@ -524,20 +524,20 @@ function wrongs(R){const{f,a,op,k,b,S,St,Pb}=R;const sw={sin:'cos',cos:'sin',tg:
 /* ================= рисунки ================= */
 function arrowDefs(svg){const id='ar'+Math.random().toString(36).slice(2,8);const defs=el('defs',{},svg),mk=el('marker',{id,viewBox:'0 0 10 10',refX:9,refY:5,markerWidth:8,markerHeight:8,orient:'auto-start-reverse'},defs);el('path',{d:'M0 0L10 5L0 10z',fill:'var(--muted)'},mk);return id;}
 const FC={sin:['#facc15','#b8860b'],cos:['#2dd4bf','#0f8f80'],tg:['#fbbf24','#c2770a'],ctg:['#60a5fa','#2563eb']};
-function drawCircle(svg,o){const W=480,H=480,cx=240,cy=240,R=178;svg.innerHTML='';svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+function drawCircle(svg,o){const W=480,H=480,cx=240,cy=240;const KK=(o.f==='tg'||o.f==='ctg')?Math.max(1,(Math.abs(o.a.v)+0.2)/1.28):1;const R=178/KK,E1=1.28*KK,E2=1.32*KK;svg.innerHTML='';svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
   const X=x=>cx+x*R,Y=y=>cy-y*R,pt=th=>[X(Math.cos(th)),Y(Math.sin(th))];const id=arrowDefs(svg);const rid=id+'r';{const mk=el('marker',{id:rid,viewBox:'0 0 10 10',refX:6,refY:5,markerWidth:5,markerHeight:5,orient:'auto'},svg.querySelector('defs'));el('path',{d:'M0 0L10 5L0 10z',fill:'#e11d48'},mk);}const f=o.f,av=o.a.v,St=o.St;
-  el('line',{x1:X(-1.28),y1:cy,x2:X(1.32),y2:cy,stroke:'var(--muted)','stroke-width':2,'marker-end':`url(#${id})`},svg);
-  el('line',{x1:cx,y1:Y(-1.28),x2:cx,y2:Y(1.32),stroke:'var(--muted)','stroke-width':2,'marker-end':`url(#${id})`},svg);
+  el('line',{x1:X(-E1),y1:cy,x2:X(E2),y2:cy,stroke:'var(--muted)','stroke-width':2,'marker-end':`url(#${id})`},svg);
+  el('line',{x1:cx,y1:Y(-E1),x2:cx,y2:Y(E2),stroke:'var(--muted)','stroke-width':2,'marker-end':`url(#${id})`},svg);
   el('circle',{cx,cy,r:R,fill:'none',stroke:'var(--ink)','stroke-width':2.5},svg);
-  txt(svg,'x',X(1.32)-4,cy-12,{'font-style':'italic',fill:'var(--muted)'});txt(svg,'y',cx+12,Y(1.32)+8,{'font-style':'italic',fill:'var(--muted)'});txt(svg,'O',cx-22,cy+24,{'font-style':'italic',fill:'var(--muted)','font-size':18});
+  txt(svg,'x',X(E2)-4,cy-12,{'font-style':'italic',fill:'var(--muted)'});txt(svg,'y',cx+12,Y(E2)+8,{'font-style':'italic',fill:'var(--muted)'});txt(svg,'O',cx-22,cy+24,{'font-style':'italic',fill:'var(--muted)','font-size':18});
   txt(svg,'1',X(1)+6,cy+22,{fill:'var(--muted)','font-size':17});txt(svg,'−1',X(-1)-30,cy+22,{fill:'var(--muted)','font-size':17});txt(svg,'1',cx+8,Y(1)-6,{fill:'var(--muted)','font-size':17});
-  const cl=v=>Math.max(-1.25,Math.min(1.25,v));const ln={stroke:'var(--c2)','stroke-width':2.5,'stroke-dasharray':'8 6'};
+  const cl=v=>Math.max(-E1,Math.min(E1,v));const ln={stroke:'var(--c2)','stroke-width':2.5,'stroke-dasharray':'8 6'};
   if(f==='sin'){if(Math.abs(av)<=1.25){el('line',Object.assign({x1:X(-1.28),y1:Y(av),x2:X(1.28),y2:Y(av)},ln),svg);txt(svg,'y = '+o.a.p,X(1.28),Y(av)+24,{fill:'var(--c2)','font-size':18,'text-anchor':'end'});}}
   else if(f==='cos'){if(Math.abs(av)<=1.25){el('line',Object.assign({x1:X(av),y1:Y(-1.28),x2:X(av),y2:Y(1.28)},ln),svg);txt(svg,'x = '+o.a.p,X(av)+6,Y(-1.25),{fill:'var(--c2)','font-size':18});}}
-  else if(f==='tg'){el('line',{x1:X(1),y1:Y(-1.28),x2:X(1),y2:Y(1.28),stroke:'var(--c3)','stroke-width':2},svg);txt(svg,L('ось тангенсов','тангенстер осі'),X(1)-8,Y(1.27),{fill:'var(--c3)','font-size':15,'text-anchor':'end'});
-    const ty=cl(av),th=Math.atan(av);el('line',Object.assign({x1:X(-Math.cos(th)*1.2),y1:Y(-Math.sin(th)*1.2),x2:X(1),y2:Y(ty)},ln),svg);el('circle',{cx:X(1),cy:Y(ty),r:6,fill:'var(--c2)'},svg);txt(svg,o.a.p,X(1)+10,Y(ty)+6,{fill:'var(--c2)','font-size':18});}
-  else{el('line',{x1:X(-1.28),y1:Y(1),x2:X(1.28),y2:Y(1),stroke:'var(--c3)','stroke-width':2},svg);txt(svg,L('ось котангенсов','котангенстер осі'),X(-1.28),Y(1)-10,{fill:'var(--c3)','font-size':15});
-    const tx=cl(av),th=PI/2-Math.atan(av);el('line',Object.assign({x1:X(-Math.cos(th)*1.2),y1:Y(-Math.sin(th)*1.2),x2:X(tx),y2:Y(1)},ln),svg);el('circle',{cx:X(tx),cy:Y(1),r:6,fill:'var(--c2)'},svg);txt(svg,o.a.p,X(tx)-10,Y(1)-12,{fill:'var(--c2)','font-size':18,'text-anchor':'middle'});}
+  else if(f==='tg'){el('line',{x1:X(1),y1:Y(-E1),x2:X(1),y2:Y(E1),stroke:'var(--c3)','stroke-width':2},svg);txt(svg,L('ось тангенсов','тангенстер осі'),X(1)+6,Y(-E1+.06),{fill:'var(--c3)','font-size':15,'text-anchor':'end'});
+    const ty=cl(av),th=Math.atan(av);el('line',Object.assign({x1:X(-Math.cos(th)*1.2*KK),y1:Y(-Math.sin(th)*1.2*KK),x2:X(1),y2:Y(ty)},ln),svg);el('circle',{cx:X(1),cy:Y(ty),r:6,fill:'var(--c2)'},svg);txt(svg,o.a.p,X(1)+10,Y(ty)+6,{fill:'var(--c2)','font-size':18});}
+  else{el('line',{x1:X(-E1),y1:Y(1),x2:X(E1),y2:Y(1),stroke:'var(--c3)','stroke-width':2},svg);txt(svg,L('ось котангенсов','котангенстер осі'),X(-E1),Y(1)-10,{fill:'var(--c3)','font-size':15});
+    const tx=cl(av),th=PI/2-Math.atan(av);el('line',Object.assign({x1:X(-Math.cos(th)*1.2*KK),y1:Y(-Math.sin(th)*1.2*KK),x2:X(tx),y2:Y(1)},ln),svg);el('circle',{cx:X(tx),cy:Y(1),r:6,fill:'var(--c2)'},svg);txt(svg,o.a.p,X(tx)-10,Y(1)-12,{fill:'var(--c2)','font-size':18,'text-anchor':'middle'});}
   const arc=(t0,t1)=>{let d='';const N=Math.max(8,Math.ceil(Math.abs(t1-t0)*30));for(let i=0;i<=N;i++){const[x,y]=pt(t0+(t1-t0)*i/N);d+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1);}el('path',{d,fill:'none',stroke:FC[f][1],'stroke-width':9,'stroke-linecap':'round',opacity:.9},svg);};
   const sector=(t0,t1)=>{let d=`M${cx} ${cy}`;const N=Math.max(8,Math.ceil(Math.abs(t1-t0)*30));for(let i=0;i<=N;i++){const[x,y]=pt(t0+(t1-t0)*i/N);d+='L'+x.toFixed(1)+' '+y.toFixed(1);}el('path',{d:d+'Z',fill:FC[f][0],'fill-opacity':.42,stroke:FC[f][1],'stroke-width':2.5,'stroke-linejoin':'round'},svg);};
   const arrowArc=(t0,t1)=>{const a0=t1-Math.min(1.1,(t1-t0)*.55),a1=t1-Math.min(.14,(t1-t0)*.12),r=R+16;let d='';for(let i=0;i<=24;i++){const t=a0+(a1-a0)*i/24;d+=(i?'L':'M')+(cx+r*Math.cos(t)).toFixed(1)+' '+(cy-r*Math.sin(t)).toFixed(1);}el('path',{d,fill:'none',stroke:'#e11d48','stroke-width':4,'stroke-linecap':'round','marker-end':`url(#${rid})`},svg);};
@@ -910,6 +910,7 @@ renderAll();syncTheme();
 #penCv{position:fixed;inset:0;width:100vw;height:100vh;z-index:900;pointer-events:none;touch-action:auto}
 #penCv.on{pointer-events:auto;touch-action:none;cursor:crosshair}
 #penCv.on.er{cursor:cell}
+#penCv.on.ln{cursor:copy}
 #penBar{position:fixed;right:18px;bottom:18px;z-index:901;display:flex;align-items:center;gap:6px;padding:8px;border-radius:40px;background:var(--surface);border:1px solid var(--line);box-shadow:0 6px 24px rgba(10,20,50,.18);font-family:'PT Sans',Arial,sans-serif}
 #penBar button{all:unset;box-sizing:border-box;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--ink);transition:background .15s}
 #penBar button:hover{background:var(--accent-soft)}
@@ -939,6 +940,8 @@ renderAll();syncTheme();
     <button data-pw="6" class="pw"><span class="wd" style="width:11px;height:11px"></span></button>
     <button data-pw="12" class="pw"><span class="wd" style="width:18px;height:18px"></span></button>
     <span class="sep"></span>
+    <button id="penCirc"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="1.6" fill="currentColor"/><path d="M12 12h8"/></svg></button>
+    <button id="penLine"><svg viewBox="0 0 24 24"><path d="M4 20 20 4"/><circle cx="4" cy="20" r="1.8" fill="currentColor"/><circle cx="20" cy="4" r="1.8" fill="currentColor"/></svg></button>
     <button id="penEr"><svg viewBox="0 0 24 24"><path d="M7 21h12"/><path d="M5.5 15.5 14 7l5 5-8.5 8.5H7.5z"/><path d="M9.5 11.5l5 5"/></svg></button>
     <button id="penUndo"><svg viewBox="0 0 24 24"><path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/></svg></button>
     <button id="penClr"><svg viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M10 11v6M14 11v6"/><path d="M6 7l1 13h10l1-13"/><path d="M9 7V4h6v3"/></svg></button>
@@ -950,12 +953,12 @@ renderAll();syncTheme();
 (function(){
   const cv=document.getElementById('penCv'),bar=document.getElementById('penBar'),ctx=cv.getContext('2d');
   const LNG=()=>(typeof LANG!=='undefined'&&LANG==='kz')?1:0;
-  const TIP={penMain:['Ручка: рисовать на экране (Esc — выключить)','Қалам: экранға жазу (Esc — өшіру)'],penEr:['Ластик','Өшіргіш'],penUndo:['Отменить последнее','Соңғысын болдырмау'],penClr:['Стереть всё на этой вкладке','Осы беттегінің бәрін өшіру'],
+  const TIP={penMain:['Ручка: рисовать на экране (Esc — выключить)','Қалам: экранға жазу (Esc — өшіру)'],penEr:['Ластик','Өшіргіш'],penLine:['Прямая линия (линейка): потяните от начала к концу','Түзу сызық (сызғыш): басынан соңына дейін тартыңыз'],penCirc:['Окружность (циркуль): нажмите в центре и потяните до нужного радиуса','Шеңбер (циркуль): центрін басып, қажетті радиусқа дейін тартыңыз'],penUndo:['Отменить последнее','Соңғысын болдырмау'],penClr:['Стереть всё на этой вкладке','Осы беттегінің бәрін өшіру'],
     ink:['Чёрный','Қара'],red:['Красный','Қызыл'],blue:['Синий','Көк'],green:['Зелёный','Жасыл'],orange:['Оранжевый','Қызғылт сары'],violet:['Фиолетовый','Күлгін'],w3:['Тонкая линия','Жіңішке сызық'],w6:['Средняя линия','Орташа сызық'],w12:['Толстая линия','Жуан сызық']};
   const COL={ink:['#1c2746','#f1f4fb'],red:['#dc2626','#ff6b6b'],blue:['#2563eb','#7aa2ff'],green:['#15803d','#4ade80'],orange:['#ea580c','#fb923c'],violet:['#7c3aed','#c4a5ff']};
   const mqD=matchMedia('(prefers-color-scheme: dark)');
   const dark=()=>{const t=document.documentElement.dataset.theme;return t?t==='dark':mqD.matches;};
-  const st={on:false,color:'red',w:6,er:false,pages:{},cleared:{},cur:null};
+  const st={on:false,color:'red',w:6,er:false,tool:null,pages:{},cleared:{},cur:null};
   const key=()=>{const t=document.querySelector('[role="tab"][aria-selected="true"]');return t?(t.id||t.dataset.tab||t.textContent):'main';};
   const list=()=>st.pages[key()]||(st.pages[key()]=[]);
   let dpr=1;
@@ -963,6 +966,8 @@ renderAll();syncTheme();
   function stroke(s){if(s.p.length===0)return;ctx.save();ctx.globalCompositeOperation=s.er?'destination-out':'source-over';
     ctx.strokeStyle=s.er?'#000':COL[s.c][dark()?1:0];ctx.fillStyle=ctx.strokeStyle;ctx.lineWidth=s.w;ctx.lineCap='round';ctx.lineJoin='round';
     const ox=scrollX,oy=scrollY,p=s.p;
+    if(s.ci){const r=p.length>1?Math.hypot(p[1][0]-p[0][0],p[1][1]-p[0][1]):0;ctx.beginPath();ctx.arc(p[0][0]-ox,p[0][1]-oy,Math.max(r,1),0,2*Math.PI);ctx.stroke();ctx.beginPath();ctx.arc(p[0][0]-ox,p[0][1]-oy,Math.max(2,s.w/2),0,7);ctx.fill();
+      if(s===st.cur&&p.length>1){ctx.setLineDash([6,6]);ctx.lineWidth=Math.max(1.5,s.w/3);ctx.beginPath();ctx.moveTo(p[0][0]-ox,p[0][1]-oy);ctx.lineTo(p[1][0]-ox,p[1][1]-oy);ctx.stroke();}ctx.restore();return;}
     if(p.length===1){ctx.beginPath();ctx.arc(p[0][0]-ox,p[0][1]-oy,s.w/2,0,7);ctx.fill();}
     else{ctx.beginPath();ctx.moveTo(p[0][0]-ox,p[0][1]-oy);for(let i=1;i<p.length-1;i++){const mx=(p[i][0]+p[i+1][0])/2,my=(p[i][1]+p[i+1][1])/2;ctx.quadraticCurveTo(p[i][0]-ox,p[i][1]-oy,mx-ox,my-oy);}
       const l=p[p.length-1];ctx.lineTo(l[0]-ox,l[1]-oy);ctx.stroke();}
@@ -973,20 +978,22 @@ renderAll();syncTheme();
     document.getElementById('penMain').setAttribute('aria-pressed',st.on);
     bar.querySelectorAll('.pc').forEach(b=>{b.setAttribute('aria-pressed',!st.er&&b.dataset.pc===st.color);b.firstElementChild.style.background=COL[b.dataset.pc][dark()?1:0];});
     bar.querySelectorAll('.pw').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.pw===st.w));
-    document.getElementById('penEr').setAttribute('aria-pressed',st.er);tips();}
+    document.getElementById('penEr').setAttribute('aria-pressed',st.er);document.getElementById('penLine').setAttribute('aria-pressed',st.tool==='line'&&!st.er);document.getElementById('penCirc').setAttribute('aria-pressed',st.tool==='circ'&&!st.er);cv.classList.toggle('ln',!!st.tool&&!st.er);tips();}
   bar.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
     if(b.id==='penMain'){st.on=!st.on;}
     else if(b.dataset.pc){st.color=b.dataset.pc;st.er=false;}
     else if(b.dataset.pw){st.w=+b.dataset.pw;}
     else if(b.id==='penEr'){st.er=!st.er;}
+    else if(b.id==='penLine'){st.tool=(st.tool==='line'&&!st.er)?null:'line';st.er=false;}
+    else if(b.id==='penCirc'){st.tool=(st.tool==='circ'&&!st.er)?null:'circ';st.er=false;}
     else if(b.id==='penUndo'){const L_=list();if(L_.length)L_.pop();else if(st.cleared[key()]){st.pages[key()]=st.cleared[key()];delete st.cleared[key()];}redraw();}
     else if(b.id==='penClr'){if(list().length){st.cleared[key()]=list();st.pages[key()]=[];}redraw();}
     ui();});
   function pt(e){return[e.clientX+scrollX,e.clientY+scrollY];}
   cv.addEventListener('pointerdown',e=>{if(!st.on)return;e.preventDefault();try{cv.setPointerCapture(e.pointerId);}catch(_){}
     const er=st.er||e.button===5||(e.buttons&32);
-    st.cur={c:st.color,w:er?Math.max(30,st.w*4):st.w,er,p:[pt(e)]};delete st.cleared[key()];redraw();});
-  cv.addEventListener('pointermove',e=>{if(!st.cur)return;const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];(evs.length?evs:[e]).forEach(ev=>st.cur.p.push(pt(ev)));redraw();});
+    st.cur={c:st.color,w:er?Math.max(30,st.w*4):st.w,er,ln:st.tool==='line'&&!er,ci:st.tool==='circ'&&!er,p:[pt(e)]};delete st.cleared[key()];redraw();});
+  cv.addEventListener('pointermove',e=>{if(!st.cur)return;if(st.cur.ci){st.cur.p=[st.cur.p[0],pt(e)];redraw();return;}if(st.cur.ln){const a=st.cur.p[0];let[b0,b1]=pt(e);const dx=b0-a[0],dy=b1-a[1],L=Math.hypot(dx,dy);if(L>0){const ang=Math.atan2(dy,dx),sn=Math.round(ang/(Math.PI/4))*(Math.PI/4);if(Math.abs(ang-sn)<0.07){b0=a[0]+L*Math.cos(sn);b1=a[1]+L*Math.sin(sn);}}st.cur.p=[a,[b0,b1]];redraw();return;}const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];(evs.length?evs:[e]).forEach(ev=>st.cur.p.push(pt(ev)));redraw();});
   const end=()=>{if(!st.cur)return;list().push(st.cur);st.cur=null;redraw();};
   cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);cv.addEventListener('lostpointercapture',end);
   addEventListener('scroll',redraw,{passive:true});addEventListener('resize',size);
